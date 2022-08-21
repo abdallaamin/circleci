@@ -1,20 +1,17 @@
 version: 2.1
-jobs:
-  print-hello:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - run:
-          command: "echo Hello, World!"
-  print-world:
-    docker:
-      -image: circleci/node:13.8.0
-    steps:
-      -run: echo world
+
 workflows:
-  welcome:
+  test-env-vars:
     jobs:
-      - print-hello
-      - print-world:
-          requires:
-            - print-hello
+      - build
+
+jobs:
+  build:
+    docker:
+      - image: cimg/base:2020.01
+    steps:
+      - checkout
+      - run:
+          name: "echo an env var that is part of our project"
+          command: |
+            echo $MY_ENV_VAR
